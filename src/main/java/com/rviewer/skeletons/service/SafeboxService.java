@@ -1,10 +1,12 @@
 package com.rviewer.skeletons.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +18,7 @@ import com.rviewer.skeletons.dao.SafeboxRepository;
 import com.rviewer.skeletons.model.Safebox;
 import com.rviewer.skeletons.service.dto.NewSafeboxReqDTO;
 import com.rviewer.skeletons.service.dto.NewSafeboxResponseDTO;
+import com.rviewer.skeletons.service.dto.SafeboxItems;
 
 @Service
 public class SafeboxService implements UserDetailsService {
@@ -39,13 +42,15 @@ public class SafeboxService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String safeboxId) throws UsernameNotFoundException {
-		Safebox safebox = safeboxRepo.findById(safeboxId).get();
-		
-		if(safebox == null) {
-			throw new SafeboxNotFoundException();
-		}
+		Safebox safebox = safeboxRepo.findById(safeboxId).orElseThrow(SafeboxNotFoundException::new);
 		
 		return new User(safebox.getId(), safebox.getPassword(), new ArrayList<>());
+	}
+
+	public SafeboxItems getSafeboxItems(String id) {
+		Safebox safebox = safeboxRepo.findById(id).orElseThrow(SafeboxNotFoundException::new);
+		
+		return new SafeboxItems(safebox.getItems());
 	}
 
 }

@@ -45,12 +45,12 @@ public class TokenManager {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 	
-	public Boolean validateJwtToken(String token, UserDetails userDetails) {
+	public boolean validateJwtToken(String token, UserDetails userDetails) {
 		Claims claims = Jwts.parserBuilder()
 				.setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
 		String username = claims.getSubject();
 		Boolean isTokenExpired = claims.getExpiration().before(new Date());
-		return username.equals(userDetails.getUsername()) && isTokenExpired;
+		return username.equals(userDetails.getUsername()) && !isTokenExpired;
 	}
 	
 	public String getSubject(String token) {

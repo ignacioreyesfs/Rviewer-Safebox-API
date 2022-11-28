@@ -37,8 +37,6 @@ public class JwtFilter extends OncePerRequestFilter{
 		String safeboxId = null;
 		String token = null;
 		
-		log.info("Estoy aca");
-		
 		if(tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
 			token = tokenHeader.substring(7);
 			try {
@@ -60,8 +58,7 @@ public class JwtFilter extends OncePerRequestFilter{
 					SecurityContextHolder.getContext().setAuthentication(authToken);
 				}
 			}
-		}
-		
+		}		
 		filterChain.doFilter(request, response);
 	}
 

@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.rviewer.skeletons.service.dto.JwtToken;
 import com.rviewer.skeletons.service.dto.NewSafeboxReqDTO;
 import com.rviewer.skeletons.service.dto.NewSafeboxResponseDTO;
 import com.rviewer.skeletons.service.dto.OpenRequestDTO;
+import com.rviewer.skeletons.service.dto.SafeboxItems;
 import com.rviewer.skeletons.utils.jwt.TokenManager;
 
 import lombok.AllArgsConstructor;
@@ -44,13 +46,18 @@ public class SafeboxController {
 					new UsernamePasswordAuthenticationToken(id,
 							openReq.getPassword()));
 		} catch (BadCredentialsException e) {
-			log.info(e.getMessage());
+			e.printStackTrace();
 			throw new InvalidCredentialsException(APIError.INVALID_CREDENTIALS);
 		}
 		
 		UserDetails safeboxDetails = safeboxService.loadUserByUsername(id);
 		String jwtToken = tokenManager.generateJwtToken(safeboxDetails);
 		return ResponseEntity.ok(new JwtToken(jwtToken));
+	}
+	
+	@GetMapping("{id}/items")
+	public ResponseEntity<SafeboxItems> getItems(@PathVariable String id){
+		return ResponseEntity.ok(safeboxService.getSafeboxItems(id));
 	}
 	
 	
