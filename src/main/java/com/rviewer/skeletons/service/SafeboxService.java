@@ -1,12 +1,10 @@
 package com.rviewer.skeletons.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,6 +49,12 @@ public class SafeboxService implements UserDetailsService {
 		Safebox safebox = safeboxRepo.findById(id).orElseThrow(SafeboxNotFoundException::new);
 		
 		return new SafeboxItems(safebox.getItems());
+	}
+
+	public void updateItems(String id, SafeboxItems content) {
+		Safebox safebox = safeboxRepo.findById(id).orElseThrow(SafeboxNotFoundException::new);
+		safebox.setItems(content.getItems());
+		safeboxRepo.save(safebox);
 	}
 
 }

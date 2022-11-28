@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +59,11 @@ public class SafeboxController {
 	@GetMapping("{id}/items")
 	public ResponseEntity<SafeboxItems> getItems(@PathVariable String id){
 		return ResponseEntity.ok(safeboxService.getSafeboxItems(id));
+	}
+	
+	@PutMapping("{id}/items")
+	public void updateItems(@PathVariable String id, @RequestBody SafeboxItems content) {
+		safeboxService.updateItems(id, content);
 	}
 	
 	
