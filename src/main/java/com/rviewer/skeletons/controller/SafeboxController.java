@@ -1,5 +1,8 @@
 package com.rviewer.skeletons.controller;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,12 +39,13 @@ public class SafeboxController {
 	private TokenManager tokenManager;
 	
 	@PostMapping
-	public NewSafeboxResponseDTO create(@RequestBody NewSafeboxReqDTO safebox) {
+	public NewSafeboxResponseDTO create(@Valid @RequestBody NewSafeboxReqDTO safebox) {
 		return safeboxService.create(safebox);
 	}
 	
 	@PostMapping("{id}/open")
-	public ResponseEntity<JwtToken> open(@PathVariable String id, @RequestBody OpenRequestDTO openReq) {
+	public ResponseEntity<JwtToken> open(@NotBlank @PathVariable String id, 
+			@Valid @RequestBody OpenRequestDTO openReq) {
 		try {
 			authManager.authenticate(
 					new UsernamePasswordAuthenticationToken(id,
@@ -57,12 +61,12 @@ public class SafeboxController {
 	}
 	
 	@GetMapping("{id}/items")
-	public ResponseEntity<SafeboxItems> getItems(@PathVariable String id){
+	public ResponseEntity<SafeboxItems> getItems(@NotBlank @PathVariable String id){
 		return ResponseEntity.ok(safeboxService.getSafeboxItems(id));
 	}
 	
 	@PutMapping("{id}/items")
-	public void updateItems(@PathVariable String id, @RequestBody SafeboxItems content) {
+	public void updateItems(@NotBlank @PathVariable String id, @RequestBody SafeboxItems content) {
 		safeboxService.updateItems(id, content);
 	}
 	
