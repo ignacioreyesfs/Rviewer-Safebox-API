@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rviewer.skeletons.dao.SafeboxRepository;
+import com.rviewer.skeletons.exception.APIError;
 import com.rviewer.skeletons.model.Safebox;
 import com.rviewer.skeletons.service.dto.NewSafeboxReqDTO;
 import com.rviewer.skeletons.service.dto.NewSafeboxResponseDTO;
@@ -30,6 +31,9 @@ public class SafeboxService implements UserDetailsService {
 	
 	@Transactional
 	public NewSafeboxResponseDTO create(NewSafeboxReqDTO safeboxReq) {
+		if(safeboxRepo.findByName(safeboxReq.getName()) != null) {
+			throw new ResourceAlreadyExistsException(APIError.SAFEBOX_ALREADY_EXISTS);
+		}
 		Safebox safebox = new Safebox();
 		safebox.setName(safeboxReq.getName());
 		safebox.setPassword(encoder.encode(safeboxReq.getPassword()));

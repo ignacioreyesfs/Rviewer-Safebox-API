@@ -41,6 +41,7 @@ public class SecurityConfig {
 			.anyRequest().authenticated()
 			.and()
 			.exceptionHandling().authenticationEntryPoint(authEntryPoint)
+			.accessDeniedHandler(authEntryPoint)
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()

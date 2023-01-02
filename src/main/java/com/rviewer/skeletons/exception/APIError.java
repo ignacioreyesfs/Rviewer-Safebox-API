@@ -7,7 +7,8 @@ public enum APIError {
 	SAFEBOX_NOT_FOUND(HttpStatus.NOT_FOUND, "Safebox not found"),
 	INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "Invalid credentials"),
 	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid Token"),
-	TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "Token expired");
+	TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "Token expired"),
+	SAFEBOX_ALREADY_EXISTS(HttpStatus.CONFLICT, "Safebox already exists");
 	
 	private final HttpStatus httpStatus;
 	private final String message;

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,11 +62,13 @@ public class SafeboxController {
 	}
 	
 	@GetMapping("{id}/items")
+	@PreAuthorize("@allowedResource.allowedResourceById(authentication, #id)")
 	public ResponseEntity<SafeboxItems> getItems(@NotBlank @PathVariable String id){
 		return ResponseEntity.ok(safeboxService.getSafeboxItems(id));
 	}
 	
 	@PutMapping("{id}/items")
+	@PreAuthorize("@allowedResource.allowedResourceById(authentication, #id)")
 	public void updateItems(@NotBlank @PathVariable String id, @RequestBody SafeboxItems content) {
 		safeboxService.updateItems(id, content);
 	}
